@@ -1,6 +1,21 @@
+#include "Application.h"
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    auto *app = new Tephryte::Application;
+
+    app->run();
+
+    delete app;
+
     return 0;
 }
+
+
+
+
+
+
+
+
+

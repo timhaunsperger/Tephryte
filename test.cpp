@@ -1,4 +1,4 @@
-// Dear ImGui: standalone example application for Glfw + Vulkan
+// Dear ImGui: standalone example application for glfw + Vulkan
 
 // Learn about Dear ImGui:
 // - FAQ                  https://dearimgui.com/faq
@@ -158,9 +158,7 @@ static void SetupVulkan(ImVector<const char*> instance_extensions)
         create_info.ppEnabledExtensionNames = instance_extensions.Data;
         err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
         check_vk_result(err);
-#ifdef IMGUI_IMPL_VULKAN_USE_VOLK
-        volkLoadInstance(g_Instance);
-#endif
+
 
         // Setup the debug report callback
 #ifdef APP_USE_VULKAN_DEBUG_REPORT

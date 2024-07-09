@@ -1,5 +1,5 @@
-[submodule "libs/Glfw"]
-	path = libs/Glfw
+[submodule "libs/glfw"]
+	path = libs/glfw
 	url = https://github.com/glfw/glfw.git
 
 [submodule "libs/ImGui"]
