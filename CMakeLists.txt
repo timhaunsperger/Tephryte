@@ -35,10 +35,12 @@ set(IMGUI_SRC
 add_executable(Tephryte
         ${IMGUI_SRC}
         main.cpp
+        Log.h
         VkBackend.cpp
         VkBackend.h
         Application.cpp
-        Application.h)
+        Application.h
+        Tephryte.h)
 
 target_link_libraries(${PROJECT_NAME} glfw Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DImTextureID=ImU64)
