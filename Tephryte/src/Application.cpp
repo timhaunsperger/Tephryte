@@ -17,6 +17,7 @@ namespace Tephryte {
         window = glfwCreateWindow(800, 600, "Tephryte", nullptr, nullptr);
         if (window == nullptr) {
             fprintf(stderr, "FAILED TO CREATE WINDOW");
+
             glfwTerminate();
             exit(1);
         }

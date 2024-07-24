@@ -10,10 +10,12 @@ option(GLFW_BUILD_DOCS "Build the GLFW documentation" OFF)
 option(GLFW_INSTALL "Generate installation target" OFF)
 option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 
-set(LIB_DIR ${PROJECT_SOURCE_DIR}/libs)
+set(LIB_DIR ${PROJECT_SOURCE_DIR}/Tephryte/vendor)
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/Tephryte/src)
 set(GLFW_DIR ${LIB_DIR}/glfw)
 set(IMGUI_DIR ${LIB_DIR}/ImGui)
 set(GLM_DIR ${LIB_DIR}/glm)
+
 
 add_subdirectory(${GLFW_DIR})
 
@@ -32,15 +34,16 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/imgui_widgets.cpp)
 
 
+
+
 add_executable(Tephryte
         ${IMGUI_SRC}
-        main.cpp
-        Log.h
-        VkBackend.cpp
-        VkBackend.h
-        Application.cpp
-        Application.h
-        Tephryte.h)
+        ${SRC_DIR}/main.cpp
+        ${SRC_DIR}/Log.h
+        ${SRC_DIR}/VkBackend.cpp
+        ${SRC_DIR}/VkBackend.h
+        ${SRC_DIR}/Application.cpp
+        ${SRC_DIR}/Application.h)
 
 target_link_libraries(${PROJECT_NAME} glfw Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DImTextureID=ImU64)
