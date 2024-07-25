@@ -16,7 +16,6 @@ set(GLFW_DIR ${LIB_DIR}/glfw)
 set(IMGUI_DIR ${LIB_DIR}/ImGui)
 set(GLM_DIR ${LIB_DIR}/glm)
 
-
 add_subdirectory(${GLFW_DIR})
 
 include_directories(${GLFW_DIR}/include ${GLFW_DIR}/deps)
@@ -31,7 +30,9 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/imgui_draw.cpp
         ${IMGUI_DIR}/imgui_demo.cpp
         ${IMGUI_DIR}/imgui_tables.cpp
-        ${IMGUI_DIR}/imgui_widgets.cpp)
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        Tephryte/src/Tephryte.h
+        Tephryte/src/Debug.h)
 
 
 

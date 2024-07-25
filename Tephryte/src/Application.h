@@ -6,16 +6,21 @@
 #define TEPHRYTE_APPLICATION_H
 
 #include <string>
+
+#include "VkBackend.h"
 #include "GLFW/glfw3.h"
 
 namespace Tephryte {
 
     struct AppOptions {
         std::string Name;
+        std::vector<const char*> vkExtensions;
+        std::vector<const char*> vkLayers;
     };
 
     class Application {
-        GLFWwindow* window;
+        VkBackend* vkBackend;
+
     public:
         Application();
 

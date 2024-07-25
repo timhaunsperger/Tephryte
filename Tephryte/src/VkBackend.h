@@ -7,31 +7,39 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <optional>
-#include "GLFW/glfw3.h"
+
+namespace Tephryte {
+    VkResult createDebugUtilsMessengerEXT(VkInstance, const VkDebugUtilsMessengerCreateInfoEXT*, VkDebugUtilsMessengerEXT*);
+    void destroyDebugUtilsMessengerEXT(VkInstance, VkDebugUtilsMessengerEXT);
+
+    struct VkSettings {
+        const char* appName;
+        std::vector<const char*> extensions = { };
+        std::vector<const char*> layers = { };
+        VkDebugUtilsMessageSeverityFlagsEXT debugLevel = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        VkDebugUtilsMessageTypeFlagsEXT debugTypes = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+    };
+
+    class VkBackend {
+
+        std::vector<const char*> extensions;
+        std::vector<const char*> layers;
+
+        VkAllocationCallbacks*   allocator = nullptr;
+        VkDebugUtilsMessengerEXT debugMessenger;
+        VkInstance               instance;
+        VkPhysicalDevice         gpu;
+        VkDevice                 device;
+        VkQueue                  queue;
+
+
+    public:
+        explicit VkBackend(const VkSettings&);
+
+        ~VkBackend();
+    };
 
 
 
-VkResult createDebugUtilsMessengerEXT(VkInstance, const VkDebugUtilsMessengerCreateInfoEXT*, VkDebugUtilsMessengerEXT*);
-void destroyDebugUtilsMessengerEXT(VkInstance, VkDebugUtilsMessengerEXT);
-
-class VkBackend {
-
-    std::vector<const char*> extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
-    std::vector<const char*> layers = { };
-
-    VkInstance               instance;
-    VkPhysicalDevice         gpu;
-    VkDevice                 device;
-    VkQueue                  queue;
-    VkAllocationCallbacks*   allocator;
-
-    const char** getExtensions(uint32_t*);
-    const char** getLayers(uint32_t*);
-
-public:
-    VkInstance init();
-
-};
-
+}
 #endif //TEPHRYTE_VKBACKEND_H

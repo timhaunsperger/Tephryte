@@ -15,8 +15,7 @@ namespace Tephryte::Log{
     inline std::string appName = "Application";
     inline std::ostream& out = std::cout;
 
-    static constexpr char sepVal = ',';
-    static constexpr char sepToken = ' ';
+    static constexpr char seperator = ',';
 
     // Helper structs used to determine if type T is supported through template black magic
     template<typename T>
@@ -52,21 +51,21 @@ namespace Tephryte::Log{
         stream << "(";
         stream << indexable[0];
         for (int i = 1; i < len; ++i) {
-            stream << sepVal << indexable[i];
+            stream << seperator << indexable[i];
         }
-        stream << ")" << sepToken;
+        stream << ")";
     }
 
     // Append type name
     template<typename T>
     void combine(std::ostringstream& log_msg, const T&){
-        log_msg << typeid(T).name() << sepToken;
+        log_msg << typeid(T).name();
     }
 
     // Append streamable token
     template<Streamable T>
     void combine(std::ostringstream& log_msg, const T& token){
-        log_msg << token << sepToken;
+        log_msg << token;
     }
 
     // Append glm vector
@@ -89,12 +88,12 @@ namespace Tephryte::Log{
             log_msg << "(";
             log_msg << mat[0][i];
             for (int j = 1; j < C; ++j) {
-                log_msg << sepVal << mat[j][i];
+                log_msg << seperator << mat[j][i];
             }
-            log_msg << ")" << sepVal;
+            log_msg << ")" << seperator;
         }
         log_msg.seekp(-1, std::ostringstream::cur);
-        log_msg << "]" << sepToken;
+        log_msg << "]";
     }
 
     // Format and append an iterable type's contents
@@ -106,11 +105,11 @@ namespace Tephryte::Log{
         combine(stream, iterable[0]);
         stream.seekp(-1, std::ostream::cur);
         for (int i = 1; i < len; ++i) {
-            stream << sepVal;
+            stream << seperator;
             combine(stream, iterable[i]);
             stream.seekp(-1, std::ostream::cur);
         }
-        stream << ")" << sepToken;
+        stream << ")";
     }
 
     // Recursively call combine function to append all tokens to log stream
@@ -140,22 +139,22 @@ namespace Tephryte::Log{
 
         switch (lvl) {
             case EngineInfo:
-                log_msg << "[INFO] TephryteEngine - ";
+                log_msg << "[TephryteEngine] Info: ";
                 break;
             case AppInfo:
-                log_msg << "[INFO] " + appName + " - ";
+                log_msg << "[" + appName + "] Info: ";
                 break;
             case EngineWarn:
-                log_msg << "[WARN] TephryteEngine - ";
+                log_msg << "[TephryteEngine] Warn: ";
                 break;
             case AppWarn:
-                log_msg << "[WARN] " + appName + " - ";
+                log_msg << "[" + appName + "] Warn: ";
                 break;
             case EngineError:
-                log_msg << "[ERROR] TephryteEngine - ";
+                log_msg << "[TephryteEngine] Error: ";
                 break;
             case AppError:
-                log_msg << "[ERROR] " + appName + " - ";
+                log_msg << "[" + appName + "] Error: ";
         }
 
         combine(log_msg, msg...);
@@ -165,13 +164,5 @@ namespace Tephryte::Log{
 
 
 }
-
-#define TPR_ENGINE_INFO( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineInfo, __VA_ARGS__);
-#define TPR_ENGINE_WARN( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineWarn, __VA_ARGS__);
-#define TPR_ENGINE_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineError, __VA_ARGS__);
-
-#define TPR_INFO( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppInfo, __VA_ARGS__);
-#define TPR_WARN( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppWarn, __VA_ARGS__);
-#define TPR_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppError, __VA_ARGS__);
 
 #endif //TEPHRYTE_LOG_H

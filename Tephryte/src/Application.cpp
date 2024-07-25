@@ -4,32 +4,38 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include "Application.h"
+#include "Tephryte.h"
 #include "GLFW/glfw3.h"
 namespace Tephryte {
     Application::Application() {
 
-        // Create Window
-        glfwInit();
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, true);
+        VkSettings vk_settings = VkSettings{
+        .appName = "Tephryte Editor",
+        .extensions = { }
+        };
 
-        window = glfwCreateWindow(800, 600, "Tephryte", nullptr, nullptr);
-        if (window == nullptr) {
-            fprintf(stderr, "FAILED TO CREATE WINDOW");
+        vkBackend = new VkBackend(vk_settings);
 
-            glfwTerminate();
-            exit(1);
-        }
+        // // Create Window
+        // glfwInit();
+        // glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        // glfwWindowHint(GLFW_RESIZABLE, true);
+        //
+        // window = glfwCreateWindow(800, 600, "Tephryte", nullptr, nullptr);
+        //
+        // if (window == nullptr) {
+        //     TPR_ENGINE_ERROR("Failed to create window");
+        //     glfwTerminate();
+        //     exit(1);
+        // }
     }
 
     void Application::run() {
-        while (true) {
 
-        }
     }
 
     Application::~Application() {
-
+        delete vkBackend;
+        glfwTerminate();
     }
 }
