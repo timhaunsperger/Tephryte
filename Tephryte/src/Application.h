@@ -8,7 +8,6 @@
 #include <string>
 
 #include "VkBackend.h"
-#include "GLFW/glfw3.h"
 
 namespace Tephryte {
 

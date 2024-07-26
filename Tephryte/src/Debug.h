@@ -31,4 +31,7 @@
 #define TPR_ENGINE_ASSERT( ... )
 #define TPR_ASSERT( ... )
 #endif //TPR_USE_ASSERTS
+
+#include "Log.h"
+
 #endif //DEBUG_H

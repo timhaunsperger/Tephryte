@@ -6,7 +6,6 @@
 #define TEPHRYTE_H
 
 #include "Debug.h"
-#include "Log.h"
 #include "VkBackend.h"
 #include "Application.h"
 

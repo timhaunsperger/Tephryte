@@ -10,6 +10,8 @@ struct test {
 };
 
 int main() {
+
+
     auto *app = new Tephryte::Application;
 
     app->run();

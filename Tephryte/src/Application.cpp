@@ -5,16 +5,24 @@
 #include <cstdio>
 #include <cstdlib>
 #include "Tephryte.h"
+
+#define VK_USE_PLATFORM_WIN32_KHR
+#define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
+
 namespace Tephryte {
     Application::Application() {
 
-        VkSettings vk_settings = VkSettings{
+        GraphicsSettings vk_settings = GraphicsSettings{
         .appName = "Tephryte Editor",
-        .extensions = { }
+        .extensions = { VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }
         };
 
-        vkBackend = new VkBackend(vk_settings);
+        glfwInit();
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        GLFWwindow* window = glfwCreateWindow(1000, 1000, "a", nullptr, nullptr);
+        vkBackend = new VkBackend(vk_settings, window);
 
         // // Create Window
         // glfwInit();
@@ -31,7 +39,9 @@ namespace Tephryte {
     }
 
     void Application::run() {
-
+        while (true) {
+            vkBackend->draw();
+        }
     }
 
     Application::~Application() {
