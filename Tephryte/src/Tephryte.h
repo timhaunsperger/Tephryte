@@ -5,7 +5,7 @@
 #ifndef TEPHRYTE_H
 #define TEPHRYTE_H
 
-#include "Debug.h"
+#include "core/Debug.h"
 #include "VkBackend.h"
 #include "Application.h"
 

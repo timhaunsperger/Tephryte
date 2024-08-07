@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <glm/vec2.hpp>
+#include <../../vendor/glm/glm/vec2.hpp>
 
 namespace Tephryte::Log{
 
@@ -139,22 +139,22 @@ namespace Tephryte::Log{
 
         switch (lvl) {
             case EngineInfo:
-                log_msg << "[TephryteEngine] Info: ";
+                log_msg << "[TephryteEngine] [INFO] ";
                 break;
             case AppInfo:
-                log_msg << "[" + appName + "] Info: ";
+                log_msg << "[" + appName + "] [INFO] ";
                 break;
             case EngineWarn:
-                log_msg << "[TephryteEngine] Warn: ";
+                log_msg << "[TephryteEngine] [WARN] ";
                 break;
             case AppWarn:
-                log_msg << "[" + appName + "] Warn: ";
+                log_msg << "[" + appName + "] [WARN] ";
                 break;
             case EngineError:
-                log_msg << "[TephryteEngine] Error: ";
+                log_msg << "[TephryteEngine] [ERROR] ";
                 break;
             case AppError:
-                log_msg << "[" + appName + "] Error: ";
+                log_msg << "[" + appName + "] [ERROR] ";
         }
 
         combine(log_msg, msg...);

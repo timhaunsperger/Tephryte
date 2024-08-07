@@ -1,7 +1,7 @@
 //
 // Created by timha on 7/9/2024.
 //
-#include "Debug.h"
+#include "core/Debug.h"
 #include "VkBackend.h"
 #define GLFW_INCLUDE_VULKAN
 #include <array>
@@ -16,6 +16,13 @@
 #define HEIGHT 1000
 
 namespace Tephryte {
+    VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT, VkDebugUtilsMessageTypeFlagsEXT, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void*)
+    {
+        TPR_LOG_STREAM << "[VulkanValidation] " << pCallbackData->pMessage << "\n";
+        return VK_FALSE;
+    }
+
     struct QueueFamilyInfo {
         uint32_t queueFamilyGeneralIndex;
         uint32_t queueFamilyGeneralCount;
@@ -38,192 +45,178 @@ namespace Tephryte {
         return buffer;
     }
 
-    VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
-    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-    void* pUserData) {
-
-        TPR_LOG_STREAM << "[vulkan] " << pCallbackData->pMessage << "\n";
-
-        return VK_FALSE;
-    }
 
 
     VkBackend::VkBackend(const GraphicsSettings& settings, GLFWwindow* window)
     : extensions(settings.extensions), layers(settings.layers) {
         VkResult err;
+//
+//         VkApplicationInfo app_info { };
+//         app_info.sType =                VK_STRUCTURE_TYPE_APPLICATION_INFO;
+//         app_info.pApplicationName =     settings.appName;
+//         app_info.pEngineName =          "Tephryte";
+//         app_info.engineVersion =        VK_MAKE_API_VERSION(0, 1, 0, 0);
+//         app_info.apiVersion =           VK_API_VERSION_1_3;
+//
+//
+//         VkInstanceCreateInfo inst_info { };
+//         inst_info.sType =               VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+//         inst_info.pApplicationInfo =    &app_info;
+//
+//         // Add debug utilities
+// #ifdef TPR_DEBUG
+//         VkDebugUtilsMessengerCreateInfoEXT debug_info { };
+//         debug_info.sType =              VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+//         debug_info.messageSeverity =    settings.debugLevel;
+//         debug_info.messageType =        settings.debugTypes;
+//         debug_info.pfnUserCallback =    debugCallback;
+//
+//         inst_info.pNext = &debug_info;
+//
+//         layers.push_back("VK_LAYER_KHRONOS_validation");
+//         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+// #endif //TPR_DEBUG
+//
+//         // Get required extensions
+//         uint32_t glfw_extension_count;
+//         const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
+//         extensions.insert(extensions.end(), glfw_extensions, glfw_extensions + glfw_extension_count);
+//
+//         // Validate layers
+//         uint32_t layer_count;
+//         vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
+//         VkLayerProperties layer_properties[layer_count];
+//         vkEnumerateInstanceLayerProperties(&layer_count, layer_properties);
+//
+//         for (const char* layer : layers) {
+//             bool available = false;
+//             for (int i = 0; i < layer_count; ++i) {
+//                 if (strcmp(layer, layer_properties[i].layerName) == 0){
+//                     available = true;
+//                     break;
+//                 }
+//             }
+//             TPR_ENGINE_ASSERT(available ,"Requested vulkan layer \"", layer, "\" not available")
+//         }
+//         inst_info.enabledLayerCount = static_cast<uint32_t>(layers.size());
+//         inst_info.ppEnabledLayerNames = layers.data();
+//
+//         // Validate extensions
+//         uint32_t extension_count;
+//         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, nullptr);
+//         VkExtensionProperties extension_properties[extension_count];
+//         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, extension_properties);
+//
+//         for (const char* ext : extensions) {
+//             bool available = false;
+//             for (int i = 0; i < extension_count; ++i) {
+//                 if (strcmp(ext, extension_properties[i].extensionName) == 0){
+//                     available = true;
+//                     break;
+//                 }
+//             }
+//             TPR_ENGINE_ASSERT(available ,"Requested vulkan extension \"", ext, "\" not available")
+//         }
+//         inst_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+//         inst_info.ppEnabledExtensionNames =  extensions.data();
+//
+//         //Create instance
+//         err = vkCreateInstance(&inst_info, allocator, &instance);
+//         TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
+//
+//         // Setup vulkan debug messenger
+// #ifdef TPR_DEBUG
+//         auto create_debug_func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
+//         TPR_ENGINE_ASSERT(create_debug_func != nullptr, "Vulkan debug messenger could not be created")
+//         err = create_debug_func(instance, &debug_info, allocator, &debugMessenger);
+//         TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
+// #endif //TPR_DEBUG
+//
+//         // Select GPU
+//         uint32_t device_count = 0;
+//         vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
+//         TPR_ENGINE_ASSERT(device_count > 0, "No gpu with vulkan support found")
+//         VkPhysicalDevice physical_devices[device_count];
+//         vkEnumeratePhysicalDevices(instance, &device_count, physical_devices);
+//
+//         gpu = physical_devices[0];
+//         for (VkPhysicalDevice physical_device : physical_devices) {
+//             VkPhysicalDeviceProperties properties;
+//             vkGetPhysicalDeviceProperties(physical_device, &properties);
+//         }
+        // // Create Surface
+        // err = glfwCreateWindowSurface(instance, window, allocator, &surface);
+        // TPR_ENGINE_ASSERT(err == VK_SUCCESS, "Failed to create vulkan surface")
+        //
+        // // Find queue families
+        // uint32_t queue_family_count = 0;
+        // vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, nullptr);
+        // VkQueueFamilyProperties queue_family_properties[queue_family_count];
+        // vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, queue_family_properties);
+        //
+        // uint32_t graphics_queue_family = -1;
+        // int index = 0;
+        // for (VkQueueFamilyProperties& props : queue_family_properties) {
+        //     VkBool32 presentSupport = false;
+        //     vkGetPhysicalDeviceSurfaceSupportKHR(gpu, index, surface, &presentSupport);
+        //     //TPR_ENGINE_INFO(presentSupport, " ", std::bitset<32>(props.queueFlags))
+        //     if ((props.queueFlags & VK_QUEUE_GRAPHICS_BIT) == VK_QUEUE_GRAPHICS_BIT) {
+        //         graphics_queue_family = index;
+        //     }
+        //     // if ((props.queueFlags & ~VK_QUEUE_SPARSE_BINDING_BIT) == VK_QUEUE_TRANSFER_BIT) {
+        //     //
+        //     // }
+        //     // if ((props.queueFlags & (VK_QUEUE_COMPUTE_BIT | VK_QUEUE_GRAPHICS_BIT)) == VK_QUEUE_COMPUTE_BIT) {
+        //     //
+        //     // }
+        //     ++index;
+        // }
+        //
+        // float priority = 1.0f;
+        // VkDeviceQueueCreateInfo queue_info{ };
+        // queue_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        // queue_info.queueFamilyIndex = graphics_queue_family;
+        // queue_info.queueCount = 1;
+        // queue_info.pQueuePriorities = &priority;
+        //
+        // VkPhysicalDeviceFeatures device_features{ };
+        // const std::vector<const char*> device_extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME };
+        //
+        // // Validate device extensions
+        // uint32_t device_extension_count;
+        // vkEnumerateDeviceExtensionProperties(gpu, nullptr, &device_extension_count, nullptr);
+        // VkExtensionProperties device_extension_properties[device_extension_count];
+        // vkEnumerateDeviceExtensionProperties(gpu, nullptr, &device_extension_count, device_extension_properties);
+        //
+        // for (const char* ext : device_extensions) {
+        //     bool available = false;
+        //     for (VkExtensionProperties& props : device_extension_properties) {
+        //         if (strcmp(ext, props.extensionName) == 0){
+        //             available = true;
+        //             break;
+        //         }
+        //     }
+        //     TPR_ENGINE_ASSERT(available, "Requested vulkan device extension \"", ext, "\" not available")
+        // }
+        //
+        // // Create device
+        // VkPhysicalDeviceDynamicRenderingFeatures dynamic_rendering_feature{};
+        // dynamic_rendering_feature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
+        // dynamic_rendering_feature.dynamicRendering = VK_TRUE;
+        //
+        // VkDeviceCreateInfo device_info{ };
+        // device_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        // device_info.queueCreateInfoCount = 1;
+        // device_info.pQueueCreateInfos = &queue_info;
+        // device_info.pEnabledFeatures = &device_features;
+        // device_info.enabledExtensionCount = device_extensions.size();
+        // device_info.ppEnabledExtensionNames = device_extensions.data();
+        // device_info.pNext = &dynamic_rendering_feature;
+        //
+        // err = vkCreateDevice(gpu, &device_info, allocator, &device);
+        // TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
 
-        VkApplicationInfo app_info { };
-        app_info.sType =                VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        app_info.pApplicationName =     settings.appName;
-        app_info.pEngineName =          "Tephryte";
-        app_info.engineVersion =        VK_MAKE_API_VERSION(1, 0, 0, 0);
-        app_info.apiVersion =           VK_API_VERSION_1_3;
-
-
-        VkInstanceCreateInfo inst_info { };
-        inst_info.sType =               VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        inst_info.pApplicationInfo =    &app_info;
-
-        // Add debug utilities
-#ifdef TPR_DEBUG
-        VkDebugUtilsMessengerCreateInfoEXT debug_info { };
-        debug_info.sType =              VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        debug_info.messageSeverity =    settings.debugLevel;
-        debug_info.messageType =        settings.debugTypes;
-        debug_info.pfnUserCallback =    debugCallback;
-
-        inst_info.pNext = &debug_info;
-
-        layers.push_back("VK_LAYER_KHRONOS_validation");
-        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#endif //TPR_DEBUG
-
-        // Get required extensions
-        uint32_t glfw_extension_count;
-        const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
-        extensions.insert(extensions.end(), glfw_extensions, glfw_extensions + glfw_extension_count);
-
-        // Validate layers
-        uint32_t layer_count;
-        vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
-        VkLayerProperties layer_properties[layer_count];
-        vkEnumerateInstanceLayerProperties(&layer_count, layer_properties);
-
-        for (const char* layer : layers) {
-            bool available = false;
-            for (int i = 0; i < layer_count; ++i) {
-                if (strcmp(layer, layer_properties[i].layerName) == 0){
-                    available = true;
-                    break;
-                }
-            }
-            TPR_ENGINE_ASSERT(available ,"Requested vulkan layer \"", layer, "\" not available")
-        }
-        inst_info.enabledLayerCount = static_cast<uint32_t>(layers.size());
-        inst_info.ppEnabledLayerNames = layers.data();
-
-        // Validate extensions
-        uint32_t extension_count;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, nullptr);
-        VkExtensionProperties extension_properties[extension_count];
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, extension_properties);
-
-        for (const char* ext : extensions) {
-            bool available = false;
-            for (int i = 0; i < extension_count; ++i) {
-                if (strcmp(ext, extension_properties[i].extensionName) == 0){
-                    available = true;
-                    break;
-                }
-            }
-            TPR_ENGINE_ASSERT(available ,"Requested vulkan extension \"", ext, "\" not available")
-        }
-        inst_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-        inst_info.ppEnabledExtensionNames =  extensions.data();
-
-        //Create instance
-        err = vkCreateInstance(&inst_info, allocator, &instance);
-        TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
-
-        // Setup vulkan debug messenger
-#ifdef TPR_DEBUG
-        auto create_debug_func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
-        TPR_ENGINE_ASSERT(create_debug_func != nullptr, "Vulkan debug messenger could not be created")
-        err = create_debug_func(instance, &debug_info, allocator, &debugMessenger);
-        TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
-#endif //TPR_DEBUG
-
-        // Select GPU
-        uint32_t device_count = 0;
-        vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
-        TPR_ENGINE_ASSERT(device_count > 0, "No gpu with vulkan support found")
-        VkPhysicalDevice physical_devices[device_count];
-        vkEnumeratePhysicalDevices(instance, &device_count, physical_devices);
-
-        gpu = physical_devices[0];
-        for (VkPhysicalDevice physical_device : physical_devices) {
-            VkPhysicalDeviceProperties properties;
-            vkGetPhysicalDeviceProperties(physical_device, &properties);
-            if(properties.deviceType == settings.requestedType) {
-                gpu = physical_device;
-                break;
-            }
-        }
-        // Create Surface
-        err = glfwCreateWindowSurface(instance, window, allocator, &surface);
-        TPR_ENGINE_ASSERT(err == VK_SUCCESS, "Failed to create vulkan surface")
-
-        // Find queue families
-        uint32_t queue_family_count = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, nullptr);
-        VkQueueFamilyProperties queue_family_properties[queue_family_count];
-        vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queue_family_count, queue_family_properties);
-
-        uint32_t graphics_queue_family = -1;
-        int index = 0;
-        for (VkQueueFamilyProperties& props : queue_family_properties) {
-            VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(gpu, index, surface, &presentSupport);
-            //TPR_ENGINE_INFO(presentSupport, " ", std::bitset<32>(props.queueFlags))
-            if ((props.queueFlags & VK_QUEUE_GRAPHICS_BIT) == VK_QUEUE_GRAPHICS_BIT) {
-                graphics_queue_family = index;
-            }
-            // if ((props.queueFlags & ~VK_QUEUE_SPARSE_BINDING_BIT) == VK_QUEUE_TRANSFER_BIT) {
-            //
-            // }
-            // if ((props.queueFlags & (VK_QUEUE_COMPUTE_BIT | VK_QUEUE_GRAPHICS_BIT)) == VK_QUEUE_COMPUTE_BIT) {
-            //
-            // }
-            ++index;
-        }
-
-        float priority = 1.0f;
-        VkDeviceQueueCreateInfo queue_info{ };
-        queue_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        queue_info.queueFamilyIndex = graphics_queue_family;
-        queue_info.queueCount = 1;
-        queue_info.pQueuePriorities = &priority;
-
-        VkPhysicalDeviceFeatures device_features{ };
-        const std::vector<const char*> device_extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME };
-
-        // Validate device extensions
-        uint32_t device_extension_count;
-        vkEnumerateDeviceExtensionProperties(gpu, nullptr, &device_extension_count, nullptr);
-        VkExtensionProperties device_extension_properties[device_extension_count];
-        vkEnumerateDeviceExtensionProperties(gpu, nullptr, &device_extension_count, device_extension_properties);
-
-        for (const char* ext : device_extensions) {
-            bool available = false;
-            for (VkExtensionProperties& props : device_extension_properties) {
-                if (strcmp(ext, props.extensionName) == 0){
-                    available = true;
-                    break;
-                }
-            }
-            TPR_ENGINE_ASSERT(available, "Requested vulkan device extension \"", ext, "\" not available")
-        }
-
-        // Create device
-        VkPhysicalDeviceDynamicRenderingFeatures dynamic_rendering_feature{};
-        dynamic_rendering_feature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
-        dynamic_rendering_feature.dynamicRendering = VK_TRUE;
-
-        VkDeviceCreateInfo device_info{ };
-        device_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        device_info.queueCreateInfoCount = 1;
-        device_info.pQueueCreateInfos = &queue_info;
-        device_info.pEnabledFeatures = &device_features;
-        device_info.enabledExtensionCount = device_extensions.size();
-        device_info.ppEnabledExtensionNames = device_extensions.data();
-        device_info.pNext = &dynamic_rendering_feature;
-
-        err = vkCreateDevice(gpu, &device_info, allocator, &device);
-        TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
-
-        vkGetDeviceQueue(device, graphics_queue_family, 0, &queue);
+        // vkGetDeviceQueue(device, graphics_queue_family, 0, &queue);
 
         // Get surface capablities
         VkSurfaceCapabilitiesKHR capabilities;

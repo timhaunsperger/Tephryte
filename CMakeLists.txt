@@ -34,16 +34,22 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/imgui_tables.cpp
         ${IMGUI_DIR}/imgui_widgets.cpp
         Tephryte/src/Tephryte.h
-        Tephryte/src/Debug.h)
+        Tephryte/src)
 
 add_executable(Tephryte
         ${IMGUI_SRC}
         ${SRC_DIR}/main.cpp
-        ${SRC_DIR}/Log.h
+        ${SRC_DIR}/core/Log.h
+        ${SRC_DIR}/core/Debug.h
         ${SRC_DIR}/VkBackend.cpp
         ${SRC_DIR}/VkBackend.h
         ${SRC_DIR}/Application.cpp
-        ${SRC_DIR}/Application.h)
+        ${SRC_DIR}/Application.h
+        ${SRC_DIR}/core/VulkanImpl.cpp
+        ${SRC_DIR}/core/VulkanImpl.h
+        ${SRC_DIR}/core/VulkanRenderer.h
+        ${SRC_DIR}/core/VulkanRenderer.cpp
+        ${SRC_DIR}/core/TephryteCore.h)
 
 target_link_libraries(${PROJECT_NAME} glfw Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DImTextureID=ImU64)

@@ -2,8 +2,6 @@
 // Created by timha on 7/9/2024.
 //
 
-#include <cstdio>
-#include <cstdlib>
 #include "Tephryte.h"
 
 #define VK_USE_PLATFORM_WIN32_KHR
@@ -15,7 +13,7 @@ namespace Tephryte {
 
         GraphicsSettings vk_settings = GraphicsSettings{
         .appName = "Tephryte Editor",
-        .extensions = { VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }
+        .extensions = {  }
         };
 
         glfwInit();

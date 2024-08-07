@@ -14,11 +14,12 @@
 
 #define TPR_ENGINE_INFO( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineInfo, __VA_ARGS__);
 #define TPR_ENGINE_WARN( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineWarn, __VA_ARGS__);
-#define TPR_ENGINE_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineError, __VA_ARGS__); TPR_EXIT
+#define TPR_ENGINE_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineError, __VA_ARGS__);
+#define TPR_ENGINE_CRITICAL( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::EngineError, __VA_ARGS__); TPR_EXIT
 
 #define TPR_INFO( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppInfo, __VA_ARGS__);
 #define TPR_WARN( ... )  ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppWarn, __VA_ARGS__);
-#define TPR_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppError, __VA_ARGS__); TPR_EXIT
+#define TPR_ERROR( ... ) ::Tephryte::Log::log(::Tephryte::Log::MsgLvl::AppError, __VA_ARGS__);
 
 #define TPR_LOG_STREAM ::Tephryte::Log::out
 
