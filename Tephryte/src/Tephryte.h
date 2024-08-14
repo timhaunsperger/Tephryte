@@ -7,7 +7,7 @@
 
 #include "core/Debug.h"
 #include "VkBackend.h"
-#include "Application.h"
+#include "core/Application.h"
 
 
 #endif //TEPHRYTE_H

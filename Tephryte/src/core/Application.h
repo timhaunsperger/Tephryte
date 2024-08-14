@@ -5,20 +5,16 @@
 #ifndef TEPHRYTE_APPLICATION_H
 #define TEPHRYTE_APPLICATION_H
 
-#include <string>
-
-#include "VkBackend.h"
+#include "Debug.h"
+#include "RenderEngine.h"
+#include "Window.h"
 
 namespace Tephryte {
 
-    struct AppOptions {
-        std::string Name;
-        std::vector<const char*> vkExtensions;
-        std::vector<const char*> vkLayers;
-    };
-
     class Application {
-        VkBackend* vkBackend;
+        Window*      window;
+        RenderEngine renderer;
+        VkPipeline renderPipeline;
 
     public:
         Application();
@@ -27,7 +23,7 @@ namespace Tephryte {
 
         virtual ~Application();
 
-        Application *CreateApplication();
+        Application* CreateApplication();
 
     };
 

@@ -17,7 +17,6 @@ namespace Tephryte::Log{
 
     static constexpr char seperator = ',';
 
-    // Helper structs used to determine if type T is supported through template black magic
     template<typename T>
     struct is_loggable : std::false_type {};
 
@@ -103,11 +102,9 @@ namespace Tephryte::Log{
         int len = std::size(iterable);
         stream << "(";
         combine(stream, iterable[0]);
-        stream.seekp(-1, std::ostream::cur);
         for (int i = 1; i < len; ++i) {
             stream << seperator;
             combine(stream, iterable[i]);
-            stream.seekp(-1, std::ostream::cur);
         }
         stream << ")";
     }
@@ -118,7 +115,6 @@ namespace Tephryte::Log{
         combine(log_msg, token);
         combine(log_msg, msg...);
     }
-
 
     enum MsgLvl{
         EngineInfo,

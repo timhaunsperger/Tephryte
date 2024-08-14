@@ -13,7 +13,7 @@ option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 set(LIB_DIR ${PROJECT_SOURCE_DIR}/Tephryte/vendor)
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/Tephryte/src)
 set(SHADER_SRC_DIR ${SRC_DIR}/graphics/shaders/src)
-set(SHADER_BIN_DIR ${SRC_DIR}/graphics/shaders/bin)
+set(SHADER_BIN_DIR ${PROJECT_BINARY_DIR}/shaders)
 set(GLFW_DIR ${LIB_DIR}/glfw)
 set(IMGUI_DIR ${LIB_DIR}/ImGui)
 set(GLM_DIR ${LIB_DIR}/glm)
@@ -33,23 +33,23 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/imgui_demo.cpp
         ${IMGUI_DIR}/imgui_tables.cpp
         ${IMGUI_DIR}/imgui_widgets.cpp
-        Tephryte/src/Tephryte.h
-        Tephryte/src)
+)
 
 add_executable(Tephryte
         ${IMGUI_SRC}
         ${SRC_DIR}/main.cpp
         ${SRC_DIR}/core/Log.h
         ${SRC_DIR}/core/Debug.h
-        ${SRC_DIR}/VkBackend.cpp
-        ${SRC_DIR}/VkBackend.h
-        ${SRC_DIR}/Application.cpp
-        ${SRC_DIR}/Application.h
+        ${SRC_DIR}/core/Application.cpp
+        ${SRC_DIR}/core/Application.h
         ${SRC_DIR}/core/VulkanImpl.cpp
         ${SRC_DIR}/core/VulkanImpl.h
-        ${SRC_DIR}/core/VulkanRenderer.h
-        ${SRC_DIR}/core/VulkanRenderer.cpp
-        ${SRC_DIR}/core/TephryteCore.h)
+        ${SRC_DIR}/core/RenderEngine.h
+        ${SRC_DIR}/core/RenderEngine.cpp
+        ${SRC_DIR}/core/TephryteCore.h
+        ${SRC_DIR}/core/Window.cpp
+        ${SRC_DIR}/core/Window.h
+        ${SRC_DIR}/core/IO.h)
 
 target_link_libraries(${PROJECT_NAME} glfw Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DImTextureID=ImU64)

@@ -1,0 +1,1 @@
+Test vkCmdResolve to swapchain vs. multisample resolve to another buffer

@@ -219,9 +219,9 @@ namespace Tephryte {
         // vkGetDeviceQueue(device, graphics_queue_family, 0, &queue);
 
         // Get surface capablities
-        VkSurfaceCapabilitiesKHR capabilities;
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &capabilities);
-
+        // VkSurfaceCapabilitiesKHR capabilities;
+        // vkGetPhysicalDeviceSurfaceCapabilitiesKHR(gpu, surface, &capabilities);
+        //
         // // Query supported surface formats
         // uint32_t surface_format_count;
         // vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &surface_format_count, nullptr);
@@ -233,58 +233,58 @@ namespace Tephryte {
         // vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &present_mode_count, nullptr);
         // VkPresentModeKHR present_modes[present_mode_count];
         // vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &present_mode_count, present_modes);
-
-        //CHANGE LATER
-        VkSurfaceFormatKHR surface_format = {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
-        VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
-        VkExtent2D swap_extent{WIDTH, HEIGHT};
-        uint32_t image_count = 3;
-
-        //Create swapchain
-        VkSwapchainCreateInfoKHR swap_info{ };
-        swap_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        swap_info.surface = surface;
-        swap_info.minImageCount = image_count;
-        swap_info.imageFormat = surface_format.format;
-        swap_info.imageColorSpace = surface_format.colorSpace;
-        swap_info.imageExtent = swap_extent;
-        swap_info.imageArrayLayers = 1;
-        swap_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-        swap_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // CHANGE IF MULTIPLE QUEUES
-        swap_info.preTransform = capabilities.currentTransform;
-        swap_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        swap_info.presentMode = present_mode;
-        swap_info.clipped = VK_TRUE;
-
-        err = vkCreateSwapchainKHR(device, &swap_info, allocator, &swapchain);
-        TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
-
-        swapchainExtent = swap_extent;
-        swapchainImageFormat = surface_format.format;
-
-        //Get swapchain images
-        vkGetSwapchainImagesKHR(device, swapchain, &image_count, nullptr);
-        swapchainImages.resize(image_count);
-        vkGetSwapchainImagesKHR(device, swapchain, &image_count, swapchainImages.data());
-
-        swapchainImageCount = image_count;
-
-        // Create image views
-        swapchainImageViews.resize(swapchainImageCount);
-        for (int i = 0; i < swapchainImageCount; ++i) {
-            VkImageViewCreateInfo view_info{};
-            view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            view_info.image = swapchainImages[i];
-            view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            view_info.format = swapchainImageFormat;
-            view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            view_info.subresourceRange.baseMipLevel = 0;
-            view_info.subresourceRange.levelCount = 1;
-            view_info.subresourceRange.baseArrayLayer = 0;
-            view_info.subresourceRange.layerCount = 1;
-            err = vkCreateImageView(device, &view_info, allocator, &swapchainImageViews[i]);
-            TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
-        }
+        //
+        // //CHANGE LATER
+        // VkSurfaceFormatKHR surface_format = {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
+        // VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
+        // VkExtent2D swap_extent{WIDTH, HEIGHT};
+        // uint32_t image_count = 3;
+        //
+        // //Create swapchain
+        // VkSwapchainCreateInfoKHR swap_info{ };
+        // swap_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        // swap_info.surface = surface;
+        // swap_info.minImageCount = image_count;
+        // swap_info.imageFormat = surface_format.format;
+        // swap_info.imageColorSpace = surface_format.colorSpace;
+        // swap_info.imageExtent = swap_extent;
+        // swap_info.imageArrayLayers = 1;
+        // swap_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        // swap_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // CHANGE IF MULTIPLE QUEUES
+        // swap_info.preTransform = capabilities.currentTransform;
+        // swap_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        // swap_info.presentMode = present_mode;
+        // swap_info.clipped = VK_TRUE;
+        //
+        // err = vkCreateSwapchainKHR(device, &swap_info, allocator, &swapchain);
+        // TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
+        //
+        // swapchainExtent = swap_extent;
+        // swapchainImageFormat = surface_format.format;
+        //
+        // //Get swapchain images
+        // vkGetSwapchainImagesKHR(device, swapchain, &image_count, nullptr);
+        // swapchainImages.resize(image_count);
+        // vkGetSwapchainImagesKHR(device, swapchain, &image_count, swapchainImages.data());
+        //
+        // swapchainImageCount = image_count;
+        //
+        // // Create image views
+        // swapchainImageViews.resize(swapchainImageCount);
+        // for (int i = 0; i < swapchainImageCount; ++i) {
+        //     VkImageViewCreateInfo view_info{ };
+        //     view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        //     view_info.image = swapchainImages[i];
+        //     view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        //     view_info.format = swapchainImageFormat;
+        //     view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        //     view_info.subresourceRange.baseMipLevel = 0;
+        //     view_info.subresourceRange.levelCount = 1;
+        //     view_info.subresourceRange.baseArrayLayer = 0;
+        //     view_info.subresourceRange.layerCount = 1;
+        //     err = vkCreateImageView(device, &view_info, allocator, &swapchainImageViews[i]);
+        //     TPR_ENGINE_ASSERT(err == VK_SUCCESS, "VkResult code: ", err);
+        // }
 
         // Create graphics pipeline
         auto vert_shader_code = readFile("shaders/base_UI.vert.spv");
@@ -447,7 +447,7 @@ namespace Tephryte {
         for (auto image_view : swapchainImageViews) {
             vkDestroyImageView(device, image_view, allocator);
         }
-        vkDestroyCommandPool(device, commandPool, allocator);
+
         vkDestroyPipeline(device, graphicsPipeline, allocator);
         vkDestroyPipelineLayout(device, pipelineLayout, allocator);
         vkDestroySwapchainKHR(device, swapchain, allocator);
@@ -522,7 +522,7 @@ namespace Tephryte {
         VkRenderingAttachmentInfo color_attachment_info{ };
         color_attachment_info.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
         color_attachment_info.clearValue.color = {0, 0, 0 ,0};
-        color_attachment_info.imageLayout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+        color_attachment_info.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         color_attachment_info.imageView = swapchainImageViews[swapCurrentFrame];
         color_attachment_info.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         color_attachment_info.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
