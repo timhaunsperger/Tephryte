@@ -73,7 +73,7 @@ namespace Tephryte {
             VkSpecializationInfo*                           vertexConstants = nullptr;
             VkSpecializationInfo*                           fragmentConstants = nullptr;
             VkPrimitiveTopology                             topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-            bool                                            primativeRestart = false;
+            bool                                            primitiveRestart = false;
             bool                                            depthClamp = false;
             VkPolygonMode                                   polygonMode = VK_POLYGON_MODE_FILL;
             VkCullModeFlags                                 cullMode = VK_CULL_MODE_NONE;
@@ -89,9 +89,9 @@ namespace Tephryte {
 
         VkShaderModule createShaderModule(std::vector<char> shaderCode);
 
-        VkPipeline createGraphicsPipieline(PipielineInfo info);
+        VkPipeline createGraphicsPipeline(PipielineInfo info);
 
-        void recordRenderCommandBuffer(VkPipeline pipieline);
+        void recordRenderCommandBuffer(VkPipeline pipeline);
 
         void render();
 

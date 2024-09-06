@@ -25,7 +25,7 @@ namespace Tephryte {
             .fragmentShader = fragModule,
         };
 
-        renderPipeline = renderer.createGraphicsPipieline(info);
+        renderPipeline = renderer.createGraphicsPipeline(info);
 
     }
 

@@ -23,6 +23,7 @@ add_subdirectory(${GLFW_DIR})
 include_directories(${GLFW_DIR}/include ${GLFW_DIR}/deps)
 include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)
 include_directories(${GLM_DIR})
+include_directories(${SRC_DIR})
 
 
 set(IMGUI_SRC
@@ -33,6 +34,8 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/imgui_demo.cpp
         ${IMGUI_DIR}/imgui_tables.cpp
         ${IMGUI_DIR}/imgui_widgets.cpp
+
+
 )
 
 add_executable(Tephryte
@@ -49,7 +52,10 @@ add_executable(Tephryte
         ${SRC_DIR}/core/TephryteCore.h
         ${SRC_DIR}/core/Window.cpp
         ${SRC_DIR}/core/Window.h
-        ${SRC_DIR}/core/IO.h)
+        ${SRC_DIR}/core/IO.h
+        Tephryte/src/core/math.h
+        Tephryte/src/core/Scene.cpp
+        Tephryte/src/core/Scene.h)
 
 target_link_libraries(${PROJECT_NAME} glfw Vulkan::Vulkan)
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DImTextureID=ImU64)

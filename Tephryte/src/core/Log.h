@@ -7,7 +7,9 @@
 
 #include <iostream>
 #include <sstream>
-#include <../../vendor/glm/glm/vec2.hpp>
+#include <glm/vec2.hpp>
+
+#include "Math.h"
 
 namespace Tephryte::Log{
 
@@ -15,7 +17,7 @@ namespace Tephryte::Log{
     inline std::string appName = "Application";
     inline std::ostream& out = std::cout;
 
-    static constexpr char seperator = ',';
+    static constexpr char separator = ',';
 
     template<typename T>
     struct is_loggable : std::false_type {};
@@ -38,7 +40,7 @@ namespace Tephryte::Log{
     template<typename T>
     concept Iterable = !Streamable<T> && requires(T iterable)
     {
-        std::begin(iterable) != std::end(iterable); // Has seperate begining and ending iterators
+        std::begin(iterable) != std::end(iterable); // Has separate beginning and ending iterators
         ++std::declval<decltype(std::begin(iterable))&>();// Iterator can be incremented
         std::size(iterable); // Has defined size
     };
@@ -50,7 +52,7 @@ namespace Tephryte::Log{
         stream << "(";
         stream << indexable[0];
         for (int i = 1; i < len; ++i) {
-            stream << seperator << indexable[i];
+            stream << separator << indexable[i];
         }
         stream << ")";
     }
@@ -87,9 +89,9 @@ namespace Tephryte::Log{
             log_msg << "(";
             log_msg << mat[0][i];
             for (int j = 1; j < C; ++j) {
-                log_msg << seperator << mat[j][i];
+                log_msg << separator << mat[j][i];
             }
-            log_msg << ")" << seperator;
+            log_msg << ")" << separator;
         }
         log_msg.seekp(-1, std::ostringstream::cur);
         log_msg << "]";
@@ -103,7 +105,7 @@ namespace Tephryte::Log{
         stream << "(";
         combine(stream, iterable[0]);
         for (int i = 1; i < len; ++i) {
-            stream << seperator;
+            stream << separator;
             combine(stream, iterable[i]);
         }
         stream << ")";
@@ -113,6 +115,7 @@ namespace Tephryte::Log{
     template<typename T, typename... Ts>
     void combine(std::ostringstream& log_msg, const T& token, const Ts&... msg){
         combine(log_msg, token);
+        log_msg << " ";
         combine(log_msg, msg...);
     }
 

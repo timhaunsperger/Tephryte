@@ -213,7 +213,7 @@ namespace Tephryte {
         return module;
     }
 
-    VkPipeline RenderEngine::createGraphicsPipieline(PipielineInfo info)
+    VkPipeline RenderEngine::createGraphicsPipeline(PipielineInfo info)
     {
         VkPipelineShaderStageCreateInfo vertex_info = {
             .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -264,7 +264,7 @@ namespace Tephryte {
         VkPipelineInputAssemblyStateCreateInfo input_assembly = {
             .sType =                            VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
             .topology =                         info.topology,
-            .primitiveRestartEnable =           info.primativeRestart
+            .primitiveRestartEnable =           info.primitiveRestart
         };
 
         VkPipelineViewportStateCreateInfo viewport_state{
@@ -349,7 +349,7 @@ namespace Tephryte {
         return pipeline;
     }
 
-    void RenderEngine::recordRenderCommandBuffer(VkPipeline pipieline) {
+    void RenderEngine::recordRenderCommandBuffer(VkPipeline pipeline) {
         Frame frame = frameInfos[currentFrame];
 
         vkWaitForFences(device, 1, &frame.frameAvailable, true, UINT64_MAX);
@@ -375,7 +375,7 @@ namespace Tephryte {
         vkCmdSetViewport(frame.cmdBuffer, 0, 1, &viewport);
         vkCmdSetScissor(frame.cmdBuffer, 0, 1, &scissor);
 
-        vkCmdBindPipeline(frame.cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipieline);
+        vkCmdBindPipeline(frame.cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         vkCmdDraw(frame.cmdBuffer, 3, 1, 0, 0);
 
         vkCmdEndRendering(frame.cmdBuffer);
